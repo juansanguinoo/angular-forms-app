@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ValidatorsService } from 'src/app/shared/services/validators.service';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -13,7 +14,10 @@ import {
   styles: [],
 })
 export class DynamicPageComponent {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private validatorsService: ValidatorsService
+  ) {}
 
   public myForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -33,9 +37,7 @@ export class DynamicPageComponent {
   }
 
   isValidField(field: string): boolean | null {
-    return (
-      this.myForm.controls[field].errors && this.myForm.controls[field].touched
-    );
+    return this.validatorsService.isValidField(this.myForm, field);
   }
 
   isValidFieldInArray(formArray: FormArray, index: number): boolean | null {
